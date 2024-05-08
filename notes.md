@@ -20,6 +20,7 @@ Flask G
 - calls add_user_to_g before request
     - setting the global object's "user" key value to user.id in session if it exists
     - else, global object's "user" key value is set to none
+- Need to make an INSTANCE of the csrf form so that we can access it throughout our app rather than making a new instance of it every time we need a form.
 
 global = {
     user = user.id
