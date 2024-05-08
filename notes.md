@@ -1,6 +1,7 @@
-Getting logout to work:
-- does the form hidden tag need to be in the html?
-- does the csrf form get used as a property or a method?
+Running questions:
+- do we need form = csrf.form within followers/unfollowers? what is different about that vs log out in app.py -- only thing that looks different is that we are using it
+- do we need a form.validate on submit for everything with csrf tag in app.py ?
+
 
 Check in questions:
 - what is the g.CsrfForm doing in the logout app.py?
