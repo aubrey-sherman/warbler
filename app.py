@@ -34,7 +34,7 @@ def add_user_to_g():
     """If we're logged in, add curr user to Flask global."""
     if CURR_USER_KEY in session:
         g.user = db.session.get(User, session[CURR_USER_KEY])
-        # g.form = CsrfForm
+        g.csrf_form = CsrfForm()  # need to make an instance of CsrfForm
 
     else:
         g.user = None
@@ -116,18 +116,14 @@ def login():
 @app.post('/logout')
 def logout():
     """Handle logout of user and redirect to homepage."""
-    # FIXME: Why is CsrfForm not accessed when we put this in global obj?
-    form = g.CsrfForm  # TODO: why is there a g. here? should it be CsrfForm()
-
-    # IMPLEMENT THIS AND FIX BUG
-
-    # remove user from session
-    # redirect to homepage
+    form = g.csrf_form
 
     if form.validate_on_submit():
         do_logout()
 
-        return redirect("/")
+        flash(f"Log out successful.")
+
+        return redirect("/login")
 
     else:
         # didn't pass CSRF; ignore logout attempt
