@@ -179,7 +179,9 @@ def show_user(user_id):
 def show_following(user_id):
     """Show list of people this user is following."""
 
-    if not g.user:
+    form = g.csrf_form
+
+    if not g.user or form.validate_on_submit():
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
@@ -208,7 +210,7 @@ def start_following(follow_id):
 
     form = g.csrf_form
 
-    if not g.user:
+    if not g.user or form.validate_on_submit():
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
@@ -229,7 +231,7 @@ def stop_following(follow_id):
 
     form = g.csrf_form
 
-    if not g.user:
+    if not g.user or form.validate_on_submit():
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
@@ -246,6 +248,11 @@ def profile():
     """Update profile for current user."""
 
     # IMPLEMENT THIS
+    form = g.csrf_form
+
+    if not g.user or form.validate_on_submit():
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
 
 
 @app.post('/users/delete')
@@ -255,7 +262,9 @@ def delete_user():
     Redirect to signup page.
     """
 
-    if not g.user:
+    form = g.csrf_form
+
+    if not g.user or form.validate_on_submit():
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
@@ -277,7 +286,9 @@ def add_message():
     Show form if GET. If valid, update message and redirect to user page.
     """
 
-    if not g.user:
+    form = g.csrf_form
+
+    if not g.user or form.validate_on_submit():
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
@@ -313,7 +324,9 @@ def delete_message(message_id):
     Redirect to user page on success.
     """
 
-    if not g.user:
+    form = g.csrf_form
+
+    if not g.user or form.validate_on_submit():
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
