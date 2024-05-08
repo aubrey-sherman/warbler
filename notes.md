@@ -1,6 +1,11 @@
 Check in questions:
 - what is the g.CsrfForm doing in the logout app.py?
 - why would need to keep it as a global variable??
+- TODO: STILL CONFUSED: this needs to live in global scope bc otherwise this will not carry over into other templates where logout is referenced
+    - flask global obj resets before every new request.
+    - it is creating a new form instance each time??
+    - logout button lives in the base template
+    - all other template extend base
 
 Flask G
 - it's a global object
