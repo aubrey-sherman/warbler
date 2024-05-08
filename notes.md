@@ -83,15 +83,15 @@ Working:
 - authorization
 - Any changes that involve the DB needs a CSRF token
 - CSRF tokens - check if ea form is a flask form
-    - registration
-    - login
+    - signup DONE, hidden tag included already
+    - login - DONE, hidden tag included already
     - adding a bio
     - edit bio - see edit notes solution doc
     - following user
     - unfollowing users
     - posting messages
     - if updating messages, see notes solution doc (passing in the new message form that has all the CSRF stuff)
-    - add CSRF token for log out form
+    - add CSRF token for log out form - DONE
     - deleting user
 
 
