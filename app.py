@@ -261,19 +261,24 @@ def delete_user():
 
     Redirect to signup page.
     """
-
-    form = g.csrf_form
-
-    if not g.user or form.validate_on_submit():
+    if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    do_logout()
+    form = g.csrf_form
 
-    db.session.delete(g.user)
-    db.session.commit()
+    if form.validate_on_submit():
+        do_logout()
 
-    return redirect("/signup")
+        db.session.delete(g.user)
+        db.session.commit()
+
+        flash("Account successfully deleted.")
+
+        return redirect("/signup")
+    else:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
 
 
 ##############################################################################
