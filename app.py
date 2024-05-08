@@ -206,6 +206,8 @@ def start_following(follow_id):
     Redirect to following page for the current for the current user.
     """
 
+    form = g.csrf_form
+
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
@@ -224,6 +226,8 @@ def stop_following(follow_id):
 
     Redirect to following page for the current for the current user.
     """
+
+    form = g.csrf_form
 
     if not g.user:
         flash("Access unauthorized.", "danger")
