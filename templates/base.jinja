@@ -55,7 +55,14 @@
           </a>
         </li>
         <li><a href="/messages/new">New Message</a></li>
-        <li><a href="/logout">Log out</a></li>
+        <li><form>
+              {{ form.hidden_tag() }}
+              <button class="btn btn-danger btn-sm"
+                formaction="/logout"
+                formmethod="POST">
+                Logout
+              </button>
+            </form></li>
       {% endif %}
 
     </ul>
