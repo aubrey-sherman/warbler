@@ -87,8 +87,8 @@ Working:
     - login - DONE, hidden tag included already
     - adding a bio
     - edit bio - see edit notes solution doc
-    - following user
-    - unfollowing users
+    - following user - DONE, added hidden tag to index.jinja and form on app.py
+    - unfollowing users - DONE, same as above
     - posting messages
     - if updating messages, see notes solution doc (passing in the new message form that has all the CSRF stuff)
     - add CSRF token for log out form - DONE
