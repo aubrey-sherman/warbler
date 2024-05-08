@@ -126,14 +126,17 @@ class User(db.Model):
         cascade="all, delete-orphan",
     )
 
+    # returning list of users that the current user is following
     @property
     def following(self):
         return [follow.following_user for follow in self.following_users]
 
+    # returning list of users that follows the current user
     @property
     def followers(self):
         return [follow.followed_user for follow in self.followers_users]
 
+    # returning User ID: username, email
     def __repr__(self):
         return f"<User #{self.id}: {self.username}, {self.email}>"
 
@@ -191,22 +194,26 @@ class User(db.Model):
         """Stop following another user."""
 
         q = (db
-            .delete(Follow)
-            .filter_by(
-                user_being_followed_id=other_user.id,
-                user_following_id=self.id)
-        )
+             .delete(Follow)
+             .filter_by(
+                 user_being_followed_id=other_user.id,
+                 user_following_id=self.id)
+             )
         dbx(q)
 
     def is_followed_by(self, other_user):
-        """Is this user followed by `other_user`?"""
+        """Is this user followed by `other_user`?
+        Returns True or False if other_user follows the current user
+        """
 
         found_user_list = [
             user for user in self.followers if user == other_user]
         return len(found_user_list) == 1
 
     def is_following(self, other_user):
-        """Is this user following `other_user`?"""
+        """Is this user following `other_user`?
+        Returns True or False if current user follows other_user.
+        """
 
         found_user_list = [
             user for user in self.following if user == other_user]
