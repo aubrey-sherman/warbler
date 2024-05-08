@@ -30,14 +30,17 @@ db.init_app(app)
 # User signup/login/logout
 
 @app.before_request
-def add_user_to_g():
-    """If we're logged in, add curr user to Flask global."""
+def add_user_and_form_to_g():
+    """If we're logged in, add curr user to Flask global.
+    Adding csrf form instance to Flask global
+    """
     if CURR_USER_KEY in session:
         g.user = db.session.get(User, session[CURR_USER_KEY])
         g.csrf_form = CsrfForm()  # need to make an instance of CsrfForm
 
     else:
         g.user = None
+        g.csrf_form = None
 
 
 def do_login(user):
