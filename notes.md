@@ -1,3 +1,7 @@
+Getting logout to work:
+- does the form hidden tag need to be in the html?
+- does the csrf form get used as a property or a method?
+
 Check in questions:
 - what is the g.CsrfForm doing in the logout app.py?
 - why would need to keep it as a global variable??
