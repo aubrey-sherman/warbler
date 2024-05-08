@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
+from werkzeug.exceptions import Unauthorized
+
 
 from forms import UserAddForm, LoginForm, MessageForm, CsrfForm
 from models import db, dbx, User, Message
@@ -32,6 +34,7 @@ def add_user_to_g():
     """If we're logged in, add curr user to Flask global."""
     if CURR_USER_KEY in session:
         g.user = db.session.get(User, session[CURR_USER_KEY])
+        g.form = CsrfForm
 
     else:
         g.user = None
@@ -113,10 +116,22 @@ def login():
 @app.post('/logout')
 def logout():
     """Handle logout of user and redirect to homepage."""
-
-    form = g.CsrfForm()  # TODO: why is there a g. here? should it be CsrfForm()
+    # FIXME: Why is CsrfForm not accessed when we put this in global obj?
+    form = g.form  # TODO: why is there a g. here? should it be CsrfForm()
 
     # IMPLEMENT THIS AND FIX BUG
+
+    # remove user from session
+    # redirect to homepage
+
+    if form.validate_on_submit():
+        do_logout()
+
+        return redirect("/")
+
+    else:
+        # didn't pass CSRF; ignore logout attempt
+        raise Unauthorized()
 
     # DO NOT CHANGE METHOD ON ROUTE
 
