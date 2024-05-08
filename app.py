@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
-from forms import UserAddForm, LoginForm, MessageForm
+from forms import UserAddForm, LoginForm, MessageForm, CsrfForm
 from models import db, dbx, User, Message
 
 load_dotenv()
@@ -27,11 +27,9 @@ db.init_app(app)
 ##############################################################################
 # User signup/login/logout
 
-
 @app.before_request
 def add_user_to_g():
     """If we're logged in, add curr user to Flask global."""
-
     if CURR_USER_KEY in session:
         g.user = db.session.get(User, session[CURR_USER_KEY])
 
@@ -116,9 +114,10 @@ def login():
 def logout():
     """Handle logout of user and redirect to homepage."""
 
-    form = g.csrf_form
+    form = g.CsrfForm()  # TODO: why is there a g. here? should it be CsrfForm()
 
     # IMPLEMENT THIS AND FIX BUG
+
     # DO NOT CHANGE METHOD ON ROUTE
 
 
