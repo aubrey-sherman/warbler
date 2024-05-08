@@ -1,5 +1,5 @@
 TODO: NEED TO FIX EVERY POST ROUTE WHERE checking user is combined with form.validate()
-- add a flash message for successfull delete
+
 
 Running questions:
 - do we need form = csrf.form within followers/unfollowers? what is different about that vs log out in app.py -- only thing that looks different is that we are using it
