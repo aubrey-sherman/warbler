@@ -396,12 +396,8 @@ def homepage():
 
         followed_ids.append(g.user.id)
 
-        q = (
-            db.select(Message)
-            .where(Message.user_id in followed_ids)
-            .order_by(Message.timestamp.desc())
-            .limit(100)
-        )
+        q = (db.select(Message).where(Message.user_id.in_(followed_ids))
+             .order_by(Message.timestamp.desc()).limit(100))
 
         messages = dbx(q).scalars().all()
 
