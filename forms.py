@@ -47,6 +47,25 @@ class LoginForm(FlaskForm):
     )
 
 
+class EditUserProfileForm(FlaskForm):
+    """Edit User Profile Form."""
+
+    location = StringField(
+        'Location',
+        validators=[Length(max=200)]
+    )
+
+    bio = StringField(
+        'Bio',
+        validators=[Length(max=1500)]
+    )
+
+    cover_photo = StringField(
+        '(Optional) Image URL',
+        validators=[Optional(), URL(), Length(max=255)]
+    )
+
+
 class CsrfForm(FlaskForm):
     """For actions where we want CSRF protection, but don't need any fields.
 
