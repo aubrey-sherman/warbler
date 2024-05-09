@@ -29,6 +29,7 @@ db.init_app(app)
 ##############################################################################
 # User signup/login/logout
 
+# TODO: Separate CSRF Form instantiation from being dependant on g.user
 @app.before_request
 def add_user_and_form_to_g():
     """If we're logged in, add curr user to Flask global.
@@ -206,6 +207,7 @@ def start_following(follow_id):
     Redirect to following page for the current user.
     """
 
+    # FIXME: Remove duplicated form instance
     form = g.csrf_form
 
     if not g.user:
@@ -259,6 +261,8 @@ def update_profile():
         Unauthorized users will be redirected to the homepage.
     """
 
+    # TODO: Separate GET and POST actions
+
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
@@ -266,6 +270,7 @@ def update_profile():
     form = EditUserProfileForm(obj=g.user)
 
     if form.validate_on_submit():
+        # FIXME: Call this method on the class, not on the instance
         if g.user.authenticate(
             username=g.user.username,
                 password=form.password.data):
@@ -273,6 +278,8 @@ def update_profile():
                 g.user.username = form.username.data
                 g.user.email = form.email.data
                 g.user.bio = form.bio.data
+                # FIXME: Import default images to use if user leaves input fields blank
+                # Import these global variables from models.py at top of this file
                 g.user.image_url = form.image_url.data
                 g.user.header_image_url = form.header_image_url.data
 
@@ -326,6 +333,8 @@ def add_message():
 
     Show form if GET. If valid, update message and redirect to user page.
     """
+
+    # TODO: Separate actions for GET and POST routes
 
     if not g.user:
         flash("Access unauthorized.", "danger")
@@ -398,8 +407,12 @@ def homepage():
 
         followed_ids.append(g.user.id)
 
-        q = (db.select(Message).where(Message.user_id.in_(followed_ids))
-             .order_by(Message.timestamp.desc()).limit(100))
+        q = (
+            db.select(Message)
+            .where(Message.user_id.in_(followed_ids))
+            .order_by(Message.timestamp.desc())
+            .limit(100)
+        )
 
         messages = dbx(q).scalars().all()
 
