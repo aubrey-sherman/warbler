@@ -1,4 +1,9 @@
-
+TODO: FIRST THING TO DO !!!!!!
+1. finish the edit profile route:
+    - get the values that user inputs
+    - update the DB upon submit
+    - redirect the user to profile page
+2. update the edit.jinja template
 
 
 Running questions:
@@ -35,46 +40,20 @@ global = {
 ## Logout
 - Make empty CsrfForm in forms.py
 - Need to fill out app.py with logout fn:
-```python
-@app.post("/logout")
-def logout():
-    """Logout. Redirects to login page."""
-
-    form = CsrfForm()
-
-    if form.validate_on_submit():
-        session.pop(AUTH_KEY) #FIXME: CHANGE THIS TO LOGOUT fn from global fns
-        return redirect("/login")
-
-    else:
-        # didn't pass CSRF; ignore logout attempt
-        raise Unauthorized()
-```
-- Currently, log out button is an a tag. need to change it to a form
-```jinja
-      <form>
-        <button class="btn btn-danger btn-sm"
-                formaction="/logout"
-                formmethod="POST">
-          Logout
-        </button>
-      </form>
-```
 
 
 Broken:
-- log out
 - viewing a user when you're logged out??
 - "Likes" is missing
 - Edit profile
 - search only allows searching for users, not posts
 - messages are NOT ordered at all
--
 
 Possible validation issues:
 - check if form is preventing user signing up with existing username/email
 
 Working:
+- log out
 - register
 - add prof pic on register
 - login
@@ -93,14 +72,15 @@ Working:
     - edit bio - see edit notes solution doc
     - following user - DONE, added hidden tag to index.jinja and form on app.py
     - unfollowing users - DONE, same as above
-    - posting messages
+    - posting messages - DONE
     - if updating messages, see notes solution doc (passing in the new message form that has all the CSRF stuff)
     - add CSRF token for log out form - DONE
-    - deleting user
-
+    - deleting user - DONE
 
 - Only things that don't need CSRF are:
     - Sign up Welcome page
+
+- CHECK the AUTHORIZATION FOR GET ROUTES - DONE
 
 
 - is this action changing the world
