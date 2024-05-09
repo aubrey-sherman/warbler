@@ -5,6 +5,11 @@ TODO: FIRST THING TO DO !!!!!!
     - redirect the user to profile page
 2. update the edit.jinja template
 
+# Parking Lot for Styling
+TODO: Update styling for uniformity
+buttons in nav bar
+log-in button
+
 
 Running questions:
 - do we need form = csrf.form within followers/unfollowers? what is different about that vs log out in app.py -- only thing that looks different is that we are using it
