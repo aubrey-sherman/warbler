@@ -266,22 +266,28 @@ def profile():
     # update the db
     # update the detail.jinja page with variables instead of hardcoded values
 
-    # if there is no user in the session
+    # first check if there is a user in the session
+    # TODO: do we also need to check if the user is authenticated here?
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    form = EditUserProfileForm()
+    # making an instance of the edit form with pre-filled data
+    form = EditUserProfileForm(obj=g.user)
 
     if form.validate_on_submit():
+        g.user.username = form.username.data
+        g.user.email = form.email.data
+        g.user.bio = form.bio.data
+        g.user.image_url = form.image_url.data
+        g.user.header_image_url = form.header_image_url.data
+        g.user.password = form.password.data  # FIXME: need to update hashed pwd
 
-        # FIXME: fill in existing fields with values that user inputted
-        return "hello world"  # FIXME:
+        db.session.commit()
 
-    else:
-        return render_template(
-            "edit.jinja",
-            form=form)
+        return redirect("/users/profile")
+
+    return render_template("edit.jinja", form=form)
 
 
 @app.post('/users/delete')
