@@ -389,10 +389,16 @@ def homepage():
     - anon users: no messages
     - logged in: 100 most recent messages of self & followed_users
     """
-
     if g.user:
+
+        # get id for each followed instance in list of who the user is following
+        followed_ids = [followed.id for followed in g.user.following]
+
+        followed_ids.append(g.user.id)
+
         q = (
             db.select(Message)
+            .where(Message.user_id in followed_ids)
             .order_by(Message.timestamp.desc())
             .limit(100)
         )
@@ -405,7 +411,7 @@ def homepage():
         return render_template('home-anon.jinja')
 
 
-@app.after_request
+@ app.after_request
 def add_header(response):
     """Add non-caching headers on every request."""
 
