@@ -205,21 +205,27 @@ def show_followers(user_id):
 def start_following(follow_id):
     """Add a follow for the currently-logged-in user.
 
-    Redirect to following page for the current for the current user.
+    Redirect to following page for the current user.
     """
 
     form = g.csrf_form
 
-    if not g.user or form.validate_on_submit():
+    if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    followed_user = db.get_or_404(User, follow_id)
+    form = g.csrf_form
 
-    g.user.follow(followed_user)
-    db.session.commit()
+    if form.validate_on_submit():
+        followed_user = db.get_or_404(User, follow_id)
+        g.user.follow(followed_user)
+        db.session.commit()
 
-    return redirect(f"/users/{g.user.id}/following")
+        return redirect(f"/users/{g.user.id}/following")
+
+    else:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
 
 
 @app.post('/users/stop-following/<int:follow_id>')
@@ -231,28 +237,37 @@ def stop_following(follow_id):
 
     form = g.csrf_form
 
-    if not g.user or form.validate_on_submit():
+    if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    followed_user = db.get_or_404(User, follow_id)
+    if form.validate_on_submit():
 
-    g.user.unfollow(followed_user)
-    db.session.commit()
+        followed_user = db.get_or_404(User, follow_id)
 
-    return redirect(f"/users/{g.user.id}/following")
+        g.user.unfollow(followed_user)
+        db.session.commit()
+
+        return redirect(f"/users/{g.user.id}/following")
+
+    else:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
 
 
 @app.route('/users/profile', methods=["GET", "POST"])
 def profile():
     """Update profile for current user."""
 
-    # IMPLEMENT THIS
+    # FIXME: IMPLEMENT THIS
     form = g.csrf_form
 
-    if not g.user or form.validate_on_submit():
+    if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
+
+    # if form.validate_on_submit():
+        # FIXME: fill in rest of condition
 
 
 @app.post('/users/delete')
@@ -291,9 +306,7 @@ def add_message():
     Show form if GET. If valid, update message and redirect to user page.
     """
 
-    form = g.csrf_form
-
-    if not g.user or form.validate_on_submit():
+    if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
@@ -331,15 +344,19 @@ def delete_message(message_id):
 
     form = g.csrf_form
 
-    if not g.user or form.validate_on_submit():
+    if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    msg = db.get_or_404(Message, message_id)
-    db.session.delete(msg)
-    db.session.commit()
+    if form.validate_on_submit():
+        msg = db.get_or_404(Message, message_id)
+        db.session.delete(msg)
+        db.session.commit()
+        return redirect(f"/users/{g.user.id}")
 
-    return redirect(f"/users/{g.user.id}")
+    else:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
 
 
 ##############################################################################
