@@ -254,40 +254,39 @@ def stop_following(follow_id):
 
 
 @app.route('/users/profile', methods=["GET", "POST"])
-def profile():
+def update_profile():
     """Update profile for current user."""
 
-    # FIXME: IMPLEMENT THIS
-
-    # make an edit form on forms.py - Done EditUserProfileForm
-    # on edit profile click, pull up the edit form page
-    # need to add in the fields for the edit form
-    # upon "save":
-    # update the db
-    # update the detail.jinja page with variables instead of hardcoded values
-
-    # first check if there is a user in the session
-    # TODO: do we also need to check if the user is authenticated here?
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    # making an instance of the edit form with pre-filled data
     form = EditUserProfileForm(obj=g.user)
 
     if form.validate_on_submit():
-        g.user.username = form.username.data
-        g.user.email = form.email.data
-        g.user.bio = form.bio.data
-        g.user.image_url = form.image_url.data
-        g.user.header_image_url = form.header_image_url.data
-        g.user.password = form.password.data  # FIXME: need to update hashed pwd
+        if g.user.authenticate(
+            username=g.user.username,
+                password=form.password.data):
+            try:
+                g.user.username = form.username.data
+                g.user.email = form.email.data
+                g.user.bio = form.bio.data
+                g.user.image_url = form.image_url.data
+                g.user.header_image_url = form.header_image_url.data
 
-        db.session.commit()
+                db.session.commit()
+                return redirect(f"/users/{g.user.id}")
 
-        return redirect("/users/profile")
+            except IntegrityError:
+                flash("Username or Email taken")
+                db.session.rollback()
+                return render_template("/users/edit.jinja", form=form)
 
-    return render_template("edit.jinja", form=form)
+        else:
+            flash("Password Incorrect", "danger")
+            return render_template("/users/edit.jinja", form=form)
+    else:
+        return render_template("/users/edit.jinja", form=form)
 
 
 @app.post('/users/delete')
