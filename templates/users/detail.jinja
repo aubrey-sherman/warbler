@@ -47,8 +47,7 @@
 
           <li class="ms-auto">
             {% if g.user.id == user.id %}
-            <form method="POST" action="/users/profile">
-            {{ g.csrf_form.hidden_tag() }}
+            <form action="/users/profile">
             <button class="btn btn-outline-secondary">
               Edit Profile
             </button>
