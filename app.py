@@ -124,7 +124,7 @@ def logout():
     if form.validate_on_submit():
         do_logout()
 
-        flash(f"Log out successful.")
+        flash(f"Log out successful.", "success")
 
         return redirect("/login")
 
@@ -255,7 +255,9 @@ def stop_following(follow_id):
 
 @app.route('/users/profile', methods=["GET", "POST"])
 def update_profile():
-    """Update profile for current user."""
+    """Update profile for current user if user is authorized to do so.
+        Unauthorized users will be redirected to the homepage.
+    """
 
     if not g.user:
         flash("Access unauthorized.", "danger")
