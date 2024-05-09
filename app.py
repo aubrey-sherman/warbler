@@ -8,7 +8,7 @@ from werkzeug.exceptions import Unauthorized
 
 
 from forms import UserAddForm, LoginForm, MessageForm, CsrfForm, EditUserProfileForm
-from models import db, dbx, User, Message
+from models import db, dbx, User, Message, DEFAULT_IMAGE_URL, DEFAULT_HEADER_IMAGE_URL
 
 load_dotenv()
 
@@ -29,19 +29,22 @@ db.init_app(app)
 ##############################################################################
 # User signup/login/logout
 
-# TODO: Separate CSRF Form instantiation from being dependant on g.user
 @app.before_request
-def add_user_and_form_to_g():
+def add_user_to_g():
     """If we're logged in, add curr user to Flask global.
-    Adding csrf form instance to Flask global
     """
     if CURR_USER_KEY in session:
         g.user = db.session.get(User, session[CURR_USER_KEY])
-        g.csrf_form = CsrfForm()  # need to make an instance of CsrfForm
 
     else:
         g.user = None
-        g.csrf_form = None
+
+
+@app.before_request
+def add_csrf_form_to_g():
+    """Add instance of CSRF form to the Flask global object."""
+
+    g.csrf_form = CsrfForm()
 
 
 def do_login(user):
@@ -207,9 +210,6 @@ def start_following(follow_id):
     Redirect to following page for the current user.
     """
 
-    # FIXME: Remove duplicated form instance
-    form = g.csrf_form
-
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
@@ -261,8 +261,6 @@ def update_profile():
         Unauthorized users will be redirected to the homepage.
     """
 
-    # TODO: Separate GET and POST actions
-
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
@@ -270,18 +268,16 @@ def update_profile():
     form = EditUserProfileForm(obj=g.user)
 
     if form.validate_on_submit():
-        # FIXME: Call this method on the class, not on the instance
-        if g.user.authenticate(
-            username=g.user.username,
+        if User.authenticate(
+                username=g.user.username,
                 password=form.password.data):
             try:
                 g.user.username = form.username.data
                 g.user.email = form.email.data
                 g.user.bio = form.bio.data
-                # FIXME: Import default images to use if user leaves input fields blank
-                # Import these global variables from models.py at top of this file
-                g.user.image_url = form.image_url.data
-                g.user.header_image_url = form.header_image_url.data
+                g.user.image_url = form.image_url.data or DEFAULT_IMAGE_URL
+                g.user.header_image_url = (
+                    form.header_image_url.data or DEFAULT_HEADER_IMAGE_URL)
 
                 db.session.commit()
                 return redirect(f"/users/{g.user.id}")
@@ -333,8 +329,6 @@ def add_message():
 
     Show form if GET. If valid, update message and redirect to user page.
     """
-
-    # TODO: Separate actions for GET and POST routes
 
     if not g.user:
         flash("Access unauthorized.", "danger")
