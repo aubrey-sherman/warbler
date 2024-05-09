@@ -1,14 +1,9 @@
-TODO: FIRST THING TO DO !!!!!!
-1. finish the edit profile route:
-    - get the values that user inputs
-    - update the DB upon submit
-    - redirect the user to profile page
-2. update the edit.jinja template
 
 # Parking Lot for Styling
 TODO: Update styling for uniformity
 buttons in nav bar
 log-in button
+how to fix the "requied" error messages being populated on page load
 
 
 Running questions:
