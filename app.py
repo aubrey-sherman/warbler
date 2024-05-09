@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import Unauthorized
 
 
-from forms import UserAddForm, LoginForm, MessageForm, CsrfForm
+from forms import UserAddForm, LoginForm, MessageForm, CsrfForm, EditUserProfileForm
 from models import db, dbx, User, Message
 
 load_dotenv()
@@ -179,9 +179,7 @@ def show_user(user_id):
 def show_following(user_id):
     """Show list of people this user is following."""
 
-    form = g.csrf_form
-
-    if not g.user or form.validate_on_submit():
+    if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
@@ -260,14 +258,30 @@ def profile():
     """Update profile for current user."""
 
     # FIXME: IMPLEMENT THIS
-    form = g.csrf_form
 
+    # make an edit form on forms.py - Done EditUserProfileForm
+    # on edit profile click, pull up the edit form page
+    # need to add in the fields for the edit form
+    # upon "save":
+    # update the db
+    # update the detail.jinja page with variables instead of hardcoded values
+
+    # if there is no user in the session
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    # if form.validate_on_submit():
-        # FIXME: fill in rest of condition
+    form = EditUserProfileForm()
+
+    if form.validate_on_submit():
+
+        # FIXME: fill in existing fields with values that user inputted
+        return "hello world"  # FIXME:
+
+    else:
+        return render_template(
+            "edit.jinja",
+            form=form)
 
 
 @app.post('/users/delete')
