@@ -54,7 +54,12 @@
             <img src="{{ g.user.image_url }}" alt="{{ g.user.username }}">
           </a>
         </li>
-        <li><a href="/messages/new">New Message</a></li>
+        <li>
+        <form action="/messages/new" method="POST">
+          {{ g.csrf_form.hidden_tag() }}
+        <button class="btn btn-danger btn-sm">New Message</button>
+        </form>
+        </li>
         <li><form>
               {{ g.csrf_form.hidden_tag() }}
               <button class="btn btn-danger btn-sm"

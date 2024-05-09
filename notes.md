@@ -1,4 +1,4 @@
-TODO: NEED TO FIX EVERY POST ROUTE WHERE checking user is combined with form.validate()
+
 
 
 Running questions:

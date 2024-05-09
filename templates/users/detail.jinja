@@ -48,9 +48,12 @@
 
           <li class="ms-auto">
             {% if g.user.id == user.id %}
-            <a href="/users/profile" class="btn btn-outline-secondary">
+            <form method="POST" action="/users/profile">
+            {{ g.csrf_form.hidden_tag() }}
+            <button class="btn btn-outline-secondary">
               Edit Profile
-            </a>
+            </button>
+            </form>
             <form method="POST" action="/users/delete">
               {{ g.csrf_form.hidden_tag() }}
               <button class="btn btn-outline-danger ms-2">
