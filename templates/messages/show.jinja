@@ -48,6 +48,7 @@
               <form method="POST"
                     action="/messages/{{ message.id }}/unlike">
                     {{ g.csrf_form.hidden_tag() }}
+                <input name="url_came_from" type="hidden" value="{{ request.url }}">
                 <button class="btn btn-outline-primary btn-sm">
                   Liked
                   <i class="bi bi-heart-fill"></i>
@@ -59,6 +60,7 @@
               <form method="POST"
                     action="/messages/{{ message.id }}/like">
                     {{ g.csrf_form.hidden_tag() }}
+                    <input name="url_came_from" type="hidden" value="{{ request.url }}">
                 <button class="btn btn-outline-primary btn-sm">
                   Not Liked
                   <i class="bi bi-heart"></i>
