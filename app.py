@@ -8,7 +8,7 @@ from werkzeug.exceptions import Unauthorized
 
 
 from forms import UserAddForm, LoginForm, MessageForm, CsrfForm, EditUserProfileForm
-from models import db, dbx, User, Message
+from models import db, dbx, User, Message, DEFAULT_IMAGE_URL, DEFAULT_HEADER_IMAGE_URL
 
 load_dotenv()
 
@@ -30,17 +30,21 @@ db.init_app(app)
 # User signup/login/logout
 
 @app.before_request
-def add_user_and_form_to_g():
+def add_user_to_g():
     """If we're logged in, add curr user to Flask global.
-    Adding csrf form instance to Flask global
     """
     if CURR_USER_KEY in session:
         g.user = db.session.get(User, session[CURR_USER_KEY])
-        g.csrf_form = CsrfForm()  # need to make an instance of CsrfForm
 
     else:
         g.user = None
-        g.csrf_form = None
+
+
+@app.before_request
+def add_csrf_form_to_g():
+    """Add instance of CSRF form to the Flask global object."""
+
+    g.csrf_form = CsrfForm()
 
 
 def do_login(user):
@@ -124,7 +128,7 @@ def logout():
     if form.validate_on_submit():
         do_logout()
 
-        flash(f"Log out successful.")
+        flash(f"Log out successful.", "success")
 
         return redirect("/login")
 
@@ -206,8 +210,6 @@ def start_following(follow_id):
     Redirect to following page for the current user.
     """
 
-    form = g.csrf_form
-
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
@@ -255,7 +257,9 @@ def stop_following(follow_id):
 
 @app.route('/users/profile', methods=["GET", "POST"])
 def update_profile():
-    """Update profile for current user."""
+    """Update profile for current user if user is authorized to do so.
+        Unauthorized users will be redirected to the homepage.
+    """
 
     if not g.user:
         flash("Access unauthorized.", "danger")
@@ -264,15 +268,16 @@ def update_profile():
     form = EditUserProfileForm(obj=g.user)
 
     if form.validate_on_submit():
-        if g.user.authenticate(
-            username=g.user.username,
+        if User.authenticate(
+                username=g.user.username,
                 password=form.password.data):
             try:
                 g.user.username = form.username.data
                 g.user.email = form.email.data
                 g.user.bio = form.bio.data
-                g.user.image_url = form.image_url.data
-                g.user.header_image_url = form.header_image_url.data
+                g.user.image_url = form.image_url.data or DEFAULT_IMAGE_URL
+                g.user.header_image_url = (
+                    form.header_image_url.data or DEFAULT_HEADER_IMAGE_URL)
 
                 db.session.commit()
                 return redirect(f"/users/{g.user.id}")
@@ -396,8 +401,12 @@ def homepage():
 
         followed_ids.append(g.user.id)
 
-        q = (db.select(Message).where(Message.user_id.in_(followed_ids))
-             .order_by(Message.timestamp.desc()).limit(100))
+        q = (
+            db.select(Message)
+            .where(Message.user_id.in_(followed_ids))
+            .order_by(Message.timestamp.desc())
+            .limit(100)
+        )
 
         messages = dbx(q).scalars().all()
 

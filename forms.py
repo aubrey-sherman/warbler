@@ -50,6 +50,8 @@ class LoginForm(FlaskForm):
 class EditUserProfileForm(FlaskForm):
     """Edit User Profile Form."""
 
+    # FIXME: Add labels for forms
+
     username = StringField(
         'Username',
         validators=[InputRequired(), Length(max=30)],
