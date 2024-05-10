@@ -4,6 +4,7 @@ TODO: Update styling for uniformity
 buttons in nav bar
 log-in button
 how to fix the "requied" error messages being populated on page load
+- add labels to the edit forms so that it's outside the box
 
 
 Running questions:
