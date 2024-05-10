@@ -1,5 +1,8 @@
 Add route to show liked messages - DONE
 Add routes for POST requests to like/unlike
+- get all like instances `g.user.likes`
+Send all the liked message id's to the template
+- `liked_message_ids = [msg.message_id for msg in curr_user.likes]`
 Update liked_messages jinja template with correct routes for form action
 Add an icon for heart (similar to Follow) onto message cards
 Give functionality to that icon/button so that users can like messages
