@@ -254,6 +254,24 @@ def stop_following(follow_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
+# TODO: Add routes here for showing liked messages, like, unlike
+
+
+@app.get('/users/<int:user_id>/liked-messages')
+def show_liked_messages(user_id):
+
+    # do security check; raise Unauthorized if it fails
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    # get data of liked messages from property method on user
+    liked_messages = g.user.liked_messages
+
+    # feed that data into the jinja template
+    return render_template(
+        'liked_messages.jinja', liked_messages=liked_messages)
+
 
 @app.route('/users/profile', methods=["GET", "POST"])
 def update_profile():
