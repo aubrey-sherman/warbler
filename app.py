@@ -292,13 +292,8 @@ def show_liked_messages(user_id):
 
 @app.post('/messages/<int:message_id>/like')
 def like_message(message_id):
-    """TODO: Write docstring"""
-# add clickable icon to message, with POST action
-# route for POST is /messages/<message_id>
-# user clicks on icon in message
-# this sends a POST request
-# in route,
-
+    """Have currently-logged-in-user like a message.
+    Redirect to liked messages page for the current user."""
     # first, authorization check
     if not g.user:
         flash("Access unauthorized.", "danger")
@@ -307,15 +302,47 @@ def like_message(message_id):
     form = g.csrf_form
 
     if form.validate_on_submit():
-        # query the database for this message from route
-        message = db.get_or_404(Message, message_id)
         # add message instance to list of liked messages
-        like = Like(message_id, g.user.id)
-
+        msg = db.get_or_404(Message, message_id)
+        like = Like(message_id=msg.id, user_id=g.user.id)
         # commit to database
+        db.session.add(like)
         db.session.commit()
 
-        # TODO: redirect to current page - TBD
+        # user can like/unlike on many different pages
+        return redirect(f'/users/{g.user.id}/liked-messages')
+
+    else:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+
+@app.post('/messages/<int:message_id>/unlike')
+def unlike_message(message_id):
+    """Have currently-logged-in-user unlike a message.
+    Redirect to liked messages page for the current user."""
+    # first, authorization check
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    form = g.csrf_form
+    # FIXME: start here
+    if form.validate_on_submit():
+        # remove message instance from list of liked messages
+        # msg = db.get_or_404(Message, message_id)
+        # get the like instance by message_id
+
+        # commit to database
+        # db.session.delete(like)
+        db.session.commit()
+
+        # user can like/unlike on many different pages
+        return redirect(f'/users/{g.user.id}/liked-messages')
+
+    else:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
 
 
 @app.route('/users/profile', methods=["GET", "POST"])
