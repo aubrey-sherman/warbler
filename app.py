@@ -265,12 +265,29 @@ def show_liked_messages(user_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
+    user = db.get_or_404(User, user_id)
     # get data of liked messages from property method on user
-    liked_messages = g.user.liked_messages
+    liked_messages = g.user.likes
+    # [<Like 89, 1>, <Like 89, 2>]
+
+    liked_message_ids = [msg.message_id for msg in liked_messages]
+    # [1,2]
+
+    # given a list of message id's, get all the message instances out
+    # and put it in a list
+
+    q = (
+        db.select(Message)
+        .where(Message.id.in_(liked_message_ids))
+        .order_by(Message.timestamp.desc())
+    )
+
+    liked_messages = dbx(q).scalars().all()
+    # [<Message 2>, <Message 1>]
 
     # feed that data into the jinja template
     return render_template(
-        'liked_messages.jinja', liked_messages=liked_messages)
+        '/users/liked_messages.jinja', user=user, liked_messages=liked_messages)
 
 
 @app.route('/users/profile', methods=["GET", "POST"])
