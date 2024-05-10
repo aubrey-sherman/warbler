@@ -32,7 +32,6 @@
                   action="/users/stop-following/{{ message.user.id }}">
                   {{ g.csrf_form.hidden_tag() }}
               <button class="btn btn-primary">Unfollow</button>
-              {# TODO: add a toggle button here #}
             </form>
             {% else %}
             <form method="POST"
@@ -43,7 +42,30 @@
               </button>
             </form>
             {% endif %}
+
+            {# if message id is one of the likes, then add a filled button #}
+            {% if g.user.is_liked(message) %}
+              <form method="POST"
+                    action="/messages/{{ message.id }}/unlike">
+                    {{ g.csrf_form.hidden_tag() }}
+                <button class="btn btn-outline-primary btn-sm">
+                  Liked
+                  <i class="bi bi-heart-fill"></i>
+                </button>
+              </form>
+
+            {# else add a unfilled button FIX POST ROUTE  #}
+            {% else %}
+              <form method="POST"
+                    action="/messages/{{ message.id }}/like">
+                    {{ g.csrf_form.hidden_tag() }}
+                <button class="btn btn-outline-primary btn-sm">
+                  Not Liked
+                  <i class="bi bi-heart"></i>
+                </button>
+              </form>
             {% endif %}
+          {% endif %}
           </div>
           <p class="single-message">{{ message.text }}</p>
           <span class="text-muted">
