@@ -32,6 +32,7 @@
                   action="/users/stop-following/{{ message.user.id }}">
                   {{ g.csrf_form.hidden_tag() }}
               <button class="btn btn-primary">Unfollow</button>
+              {# TODO: add a toggle button here #}
             </form>
             {% else %}
             <form method="POST"
