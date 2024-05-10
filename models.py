@@ -126,7 +126,18 @@ class User(db.Model):
         cascade="all, delete-orphan",
     )
 
+    likes = db.relationship(
+        "Like",
+        back_populates="user",
+        cascade="all, delete-orphan")
+
+    @property
+    def liked_messages(self):
+        """Returns liked messages for this user"""
+        return [msg for msg in self.likes]
+
     # returning list of users that the current user is following
+
     @property
     def following(self):
         return [follow.following_user for follow in self.following_users]
@@ -251,4 +262,43 @@ class Message(db.Model):
     user = db.relationship(
         "User",
         back_populates="messages",
+    )
+
+    likes = db.relationship(
+        "Like",
+        back_populates="message",
+        cascade="all, delete-orphan")
+
+
+class Like(db.Model):
+    """Mapping a liked message to a user"""
+
+    __tablename__ = "likes"
+
+    __table_args__ = (
+        db.UniqueConstraint("user_id", "message_id"),
+    )
+
+    user_id = db.mapped_column(
+        db.Integer,
+        db.ForeignKey('users.id', ondelete="cascade", onupdate="cascade"),
+        primary_key=True,
+        nullable=False,
+    )
+
+    message_id = db.mapped_column(
+        db.Integer,
+        db.ForeignKey('messages.id', ondelete="cascade", onupdate="cascade"),
+        primary_key=True,
+        nullable=False,
+    )
+
+    user = db.relationship(
+        "User",
+        back_populates="likes",
+    )
+
+    message = db.relationship(
+        "Message",
+        back_populates="likes",
     )
