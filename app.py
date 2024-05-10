@@ -309,8 +309,10 @@ def like_message(message_id):
         db.session.add(like)
         db.session.commit()
 
+        url_came_from = request.form["url_came_from"]
+
         # user can like/unlike on many different pages
-        return redirect(f'/users/{g.user.id}/liked-messages')
+        return redirect(url_came_from)
 
     else:
         flash("Access unauthorized.", "danger")
@@ -327,18 +329,19 @@ def unlike_message(message_id):
         return redirect("/")
 
     form = g.csrf_form
-    # FIXME: start here
     if form.validate_on_submit():
-        # remove message instance from list of liked messages
-        # msg = db.get_or_404(Message, message_id)
-        # get the like instance by message_id
 
-        # commit to database
-        # db.session.delete(like)
+        q = db.select(Like).filter_by(user_id=g.user.id, message_id=message_id)
+
+        like = dbx(q).scalars().one()
+
+        db.session.delete(like)
         db.session.commit()
 
+        url_came_from = request.form["url_came_from"]
+
         # user can like/unlike on many different pages
-        return redirect(f'/users/{g.user.id}/liked-messages')
+        return redirect(url_came_from)
 
     else:
         flash("Access unauthorized.", "danger")
