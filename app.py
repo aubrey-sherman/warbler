@@ -8,7 +8,7 @@ from werkzeug.exceptions import Unauthorized
 
 
 from forms import UserAddForm, LoginForm, MessageForm, CsrfForm, EditUserProfileForm
-from models import db, dbx, User, Message, DEFAULT_IMAGE_URL, DEFAULT_HEADER_IMAGE_URL
+from models import db, dbx, User, Message, Like, DEFAULT_IMAGE_URL, DEFAULT_HEADER_IMAGE_URL
 
 load_dotenv()
 
@@ -288,6 +288,34 @@ def show_liked_messages(user_id):
     # feed that data into the jinja template
     return render_template(
         '/users/liked_messages.jinja', user=user, liked_messages=liked_messages)
+
+
+@app.post('/messages/<int:message_id>/like')
+def like_message(message_id):
+    """TODO: Write docstring"""
+# add clickable icon to message, with POST action
+# route for POST is /messages/<message_id>
+# user clicks on icon in message
+# this sends a POST request
+# in route,
+
+    # first, authorization check
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    form = g.csrf_form
+
+    if form.validate_on_submit():
+        # query the database for this message from route
+        message = db.get_or_404(Message, message_id)
+        # add message instance to list of liked messages
+        like = Like(message_id, g.user.id)
+
+        # commit to database
+        db.session.commit()
+
+        # TODO: redirect to current page - TBD
 
 
 @app.route('/users/profile', methods=["GET", "POST"])
