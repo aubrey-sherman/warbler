@@ -131,11 +131,11 @@ class User(db.Model):
         back_populates="user",
         cascade="all, delete-orphan")
 
-    # TODO: Start debugging here
     @property
     def liked_messages(self):
         """Returns liked messages for this user"""
-        return [msg for msg in self.likes]
+
+        return [like_instance.message for like_instance in self.likes]
 
     # returning list of users that the current user is following
 
@@ -230,6 +230,15 @@ class User(db.Model):
         found_user_list = [
             user for user in self.following if user == other_user]
         return len(found_user_list) == 1
+
+    def is_liked(self, msg):
+        """Did this user like this 'message'?
+        Returns True or False if current user liked the message."""
+
+        liked_message_list = [
+            liked_msg for liked_msg in self.liked_messages if liked_msg == msg]
+
+        return len(liked_message_list) == 1
 
 
 class Message(db.Model):
