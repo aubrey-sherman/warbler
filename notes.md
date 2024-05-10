@@ -1,9 +1,16 @@
+Add route to show liked messages - DONE
+Add routes for POST requests to like/unlike
+Update liked_messages jinja template with correct routes for form action
+Add an icon for heart (similar to Follow) onto message cards
+Give functionality to that icon/button so that users can like messages
+Add number of liked messages to profile page
+Add link to profile page (replace TBD placeholder) to display all liked messages (similar to clicking on Following)
 
-# Parking Lot for Styling
+
+# Parking Lot
 TODO: Update styling for uniformity
 buttons in nav bar
 log-in button
-how to fix the "requied" error messages being populated on page load
 - add labels to the edit forms so that it's outside the box
 
 
