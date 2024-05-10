@@ -131,6 +131,7 @@ class User(db.Model):
         back_populates="user",
         cascade="all, delete-orphan")
 
+    # TODO: Start debugging here
     @property
     def liked_messages(self):
         """Returns liked messages for this user"""
