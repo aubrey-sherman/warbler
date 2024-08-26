@@ -36,7 +36,7 @@ OR
 flask run -p 5001
 ```
 
-^^ This second command is necessary on Macs that already have port 5000 in use.
+*This second command is necessary on Macs that already have port 5000 in use.*
 
 #### Open in browser
 http://localhost:5000 or http://localhost:5001
