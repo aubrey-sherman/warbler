@@ -1,4 +1,4 @@
-# Warbler
+## Warbler
 
 Warbler is a Flask-powered Twitter clone with functionality for users to:
     - register
@@ -8,9 +8,9 @@ Warbler is a Flask-powered Twitter clone with functionality for users to:
     - write 'warbles'
     - update their profiles
 
-## Installation
+### Installation
 
-# Create the Python virtual environment
+#### Create the Python virtual environment
 
 ```
 $ python3 -m venv venv
@@ -18,15 +18,15 @@ $ source venv/bin/activate
 (venv) $ pip install -r requirements.txt
 ```
 
-# Create an .env file to hold configuration with your SECRET_KEY and DATABASE_URL
+#### Create an .env file to hold configuration with your SECRET_KEY and DATABASE_URL
 
-# Set up the database:
+#### Set up the database:
 ```
 (venv) $ createdb warbler
 (venv) $ python seed.py
 ```
 
-# Start the server
+#### Start the server
 ```
 (venv) $ flask run
 ```
@@ -38,7 +38,8 @@ flask run -p 5001
 
 ^^ This second command is necessary on Macs that already have port 5000 in use.
 
-# Open http://localhost:5000 or http://localhost:5001 in your browser
+#### Open in browser
+http://localhost:5000 or http://localhost:5001
 
-# Collaborators
+#### Collaborators
 [Alice Chang](https://github.com/alicechang29)
