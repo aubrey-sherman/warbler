@@ -1,12 +1,12 @@
 ## Warbler
 
 Warbler is a Flask-powered Twitter clone with functionality for users to:
-    - register
-    - sign in/out
-    - follow/unfollow other users
-    - like/unlike 'warbles' (posts) by other users
-    - write 'warbles'
-    - update their profiles
+* register
+* sign in/out
+* follow/unfollow other users
+* like/unlike 'warbles' (posts) by other users
+* write 'warbles'
+* update their profiles
 
 ### Installation
 
