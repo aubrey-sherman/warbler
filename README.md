@@ -18,7 +18,14 @@ $ source venv/bin/activate
 (venv) $ pip install -r requirements.txt
 ```
 
-#### Create an .env file to hold configuration with your SECRET_KEY and DATABASE_URL
+#### Create an .env file to hold configuration
+
+In your .env file:
+
+```
+DATABASE_URL=postgresql:///warbler
+```
+*Add your SECRET_KEY too!*
 
 #### Set up the database:
 ```
