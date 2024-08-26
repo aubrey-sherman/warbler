@@ -48,5 +48,5 @@ flask run -p 5001
 #### Open in browser
 http://localhost:5000 or http://localhost:5001
 
-#### Collaborators
+### Collaborators
 [Alice Chang](https://github.com/alicechang29)
