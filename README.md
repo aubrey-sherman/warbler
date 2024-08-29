@@ -1,14 +1,30 @@
 ## Warbler
 
 Warbler is a Flask-powered Twitter clone with functionality for users to:
-* register
-* sign in/out
-* follow/unfollow other users
-* like/unlike 'warbles' (posts) by other users
-* write 'warbles'
-* update their profiles
+* Register
+* Sign in/out
+* Follow/unfollow other users
+* Like/unlike posts
+* Update their profile
+* View other user's profiles
+* View a feed of posts from users they follow
+
+Demo as a user:
+
+Go to https://aubrey-warbler.onrender.com
+Log in
+* Username: tuckerdiane
+* Password: password
 
 ### Installation
+
+To run this app locally:
+
+#### Clone the repo
+
+```
+git clone https://github.com/aubrey-sherman/warbler.git
+```
 
 #### Create the Python virtual environment
 
@@ -24,10 +40,10 @@ In your .env file:
 
 ```
 DATABASE_URL=postgresql:///warbler
+SECRET_KEY=<your key value here>
 ```
-*Add your SECRET_KEY too!*
 
-#### Set up the database:
+#### Set up the PostgreSQL database with seeded data:
 ```
 (venv) $ createdb warbler
 (venv) $ python seed.py
@@ -35,18 +51,11 @@ DATABASE_URL=postgresql:///warbler
 
 #### Start the server
 ```
-(venv) $ flask run
+(venv) $ flask run -p 5001
 ```
-OR
-
-```
-flask run -p 5001
-```
-
-*This second command is necessary on Macs that already have port 5000 in use.*
 
 #### Open in browser
-http://localhost:5000 or http://localhost:5001
+http://localhost:5001
 
 ### Collaborators
 [Alice Chang](https://github.com/alicechang29)
